@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 
 export class AppError extends Error {
   public status: number
@@ -30,8 +30,8 @@ export class AuthError extends AppError {
 export const errorHandler = (
   err: Error,
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
+  // next: NextFunction
 ) => {
   if (err instanceof ValidationError) {
     return res.status(err.status).json({
