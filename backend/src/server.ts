@@ -1,16 +1,23 @@
-import express from "express";
-import { sequelize } from "./database/sequelize";
-import User from "./database/models/user.model";
+import express from 'express'
+import { sequelize } from './database/sequelize'
+import cors from 'cors'
+import api from './routes'
+import { errorHandler } from './utils/errors'
+import cookieParser from 'cookie-parser'
 
-const app = express();
-app.use(express.json());
+const app = express()
 
-app.get("/", async (_, res) => {
-    const users = await User.findAll();
-    res.json(users);
-});
+const port = process.env.PORT || 8000
+
+app.use(cors())
+app.use(cookieParser())
+app.use(express.json())
+app.use('/api', api)
+app.use(errorHandler)
 
 sequelize.sync({ alter: true }).then(() => {
-    console.log("Database connected");
-    app.listen(4000, () => console.log("Server running on 4000"));
-});
+  console.log('Database connected')
+  app.listen(port, () => console.log(`Server started on port ${port}`))
+})
+
+export default app
