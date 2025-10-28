@@ -13,7 +13,7 @@ const token = (user: User, res: Response) => {
     email: user.email,
   })
 
-  res.cookie('blogsToken', generatedToken, {
+  res.cookie(APP_TOKEN_NAME, generatedToken, {
     httpOnly: true,
     sameSite: 'strict',
     maxAge: 24 * 60 * 60 * 1000,
@@ -95,7 +95,7 @@ export const login = catchAsync(async (req: Request, res: Response) => {
 })
 
 export const logout = catchAsync(async (req: Request, res: Response) => {
-  res.clearCookie('blogsToken', {
+  res.clearCookie(APP_TOKEN_NAME, {
     httpOnly: true,
     sameSite: 'strict',
     maxAge: 24 * 60 * 60 * 1000,

@@ -1,6 +1,11 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, } from 'sequelize'
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize'
 import { sequelize } from '../sequelize'
-import User from './user.model'
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>
@@ -22,7 +27,5 @@ Post.init(
     tableName: 'posts',
   }
 )
-
-Post.belongsTo(User, { foreignKey: 'userId' })
 
 export default Post
