@@ -1,8 +1,10 @@
 import express from 'express'
-import { createUser } from '../controllers/UserControllers'
+import { createUser, updateUser } from '../controllers/UserControllers'
+import { requireAuth } from '../utils/requireAuth'
 
 const userRouter = express.Router()
 
-userRouter.post('/add', createUser)
+userRouter.post('/sign-up', createUser)
+userRouter.patch('/update/:id', requireAuth, updateUser)
 
 export default userRouter

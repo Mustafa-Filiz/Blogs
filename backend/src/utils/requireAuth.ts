@@ -1,11 +1,8 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { AuthError } from './errors'
 import { verifyToken } from './jwt'
 import { User } from '../types/User'
-
-interface AuthRequest extends Request {
-  user?: Omit<User, 'password'>
-}
+import { AuthRequest } from '../types/AuthRequest'
 
 export const requireAuth = (
   req: AuthRequest,

@@ -4,6 +4,7 @@ import { User } from '../types/User'
 import { ValidationError } from '../utils/errors'
 import { UserService } from '../services/UserServices'
 import { generateToken } from '../utils/jwt'
+import { hashPassword } from '../utils/hashPassword'
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
   const { name, email, password }: User = req.body
@@ -30,5 +31,25 @@ export const createUser = catchAsync(async (req: Request, res: Response) => {
     data: {
       user: { id: user.id, name: user.name, email: user.email },
     },
+  })
+})
+
+export const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const userId = Number(req.params.id)
+  const updatedFields: Partial<Omit<User, 'id' | 'email'>> = req.body
+  const user = await UserService.getUserById(userId)
+
+  if (updatedFields.name) {
+    user.name = updatedFields.name
+  }
+
+  if (updatedFields.password) {
+    user.password = await hashPassword(updatedFields.password)
+  }
+
+  await user.save()
+
+  res.status(201).json({
+    status: 'success',
   })
 })
