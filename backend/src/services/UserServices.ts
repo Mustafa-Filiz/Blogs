@@ -1,6 +1,6 @@
 import User from '../database/models/user.model'
 import { AppError, ValidationError } from '../utils/errors'
-import { hashPassword } from '../utils/hashPassword'
+import { hashPassword } from '../utils/password'
 
 export class UserService {
   static async createUser(name: string, email: string, password: string) {
