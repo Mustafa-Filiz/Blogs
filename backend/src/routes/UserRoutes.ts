@@ -11,9 +11,9 @@ import { requireAuth } from '../utils/requireAuth'
 const userRouter = express.Router()
 
 userRouter.post('/sign-up', createUser)
-userRouter.patch('/update/:id', requireAuth, updateUser)
-userRouter.get('/delete/:id', requireAuth, deleteUser)
 userRouter.post('/login', login)
 userRouter.get('/logout', logout)
+userRouter.patch('/update/:id', requireAuth, updateUser)
+userRouter.get('/delete/:id', requireAuth, deleteUser)
 
 export default userRouter

@@ -27,13 +27,67 @@ export const createPost = catchAsync(
 
 export const getUserPosts = catchAsync(
   async (req: AuthRequest, res: Response) => {
-    const { id: userId } = req.user!
+    const userId = Number(req.params.id)
 
     const userPosts = await PostService.getUserPosts(userId)
 
     res.send({
       status: 200,
       data: userPosts,
+    })
+  }
+)
+
+export const getPost = catchAsync(async (req: AuthRequest, res: Response) => {
+  const postId = Number(req.params.id)
+
+  const post = await PostService.getPost(postId)
+
+  if (!post) throw new ValidationError('Post not found')
+
+  res.send({
+    status: 200,
+    data: post,
+  })
+})
+
+export const updatePost = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const postId = Number(req.params.id)
+    const { title, content } = req.body as Partial<Omit<Post, 'id' | 'userId'>>
+
+    const post = await PostService.getPost(postId)
+
+    if (title) {
+      post.title = title
+    }
+
+    if (content) {
+      post.content = content
+    }
+
+    await post.save()
+
+    res.send({
+      status: 200,
+      data: post,
+    })
+  }
+)
+
+export const deletePost = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const postId = Number(req.params.id)
+
+    const post = await PostService.getPost(postId)
+
+    if (!post) throw new ValidationError('Post not found')
+
+    await post.destroy()
+
+    res.send({
+      status: 200,
+      message: 'Post deleted successfully',
     })
   }
 )
