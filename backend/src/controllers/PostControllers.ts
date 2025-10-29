@@ -12,17 +12,28 @@ export const createPost = catchAsync(
     if (!title || !content)
       throw new ValidationError('Title and content is required')
 
-    if (!req.user) throw new ValidationError('User is required')
-
     const newPost = await PostService.create({
       title,
       content,
-      userId: req.user.id,
+      userId: req.user!.id,
     })
 
     res.send({
       status: 200,
       data: newPost,
+    })
+  }
+)
+
+export const getUserPosts = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const { id: userId } = req.user!
+
+    const userPosts = await PostService.getUserPosts(userId)
+
+    res.send({
+      status: 200,
+      data: userPosts,
     })
   }
 )

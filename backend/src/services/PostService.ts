@@ -7,6 +7,6 @@ export class PostService {
   }
 
   static async getUserPosts(userId: number) {
-    return await PostModel.findAll({ where: { userId: userId } })
+    return await PostModel.findAll({ where: { userId } })
   }
 }

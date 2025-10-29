@@ -1,5 +1,13 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, } from 'sequelize'
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize'
 import { sequelize } from '../sequelize'
+import User from './user.model'
+import Post from './post.model'
 
 class Like extends Model<InferAttributes<Like>, InferCreationAttributes<Like>> {
   declare id: CreationOptional<number>
@@ -24,5 +32,10 @@ Like.init(
     tableName: 'likes',
   }
 )
+
+User.hasMany(Like)
+Post.hasMany(Like)
+Like.belongsTo(User, { foreignKey: 'userId' })
+Like.belongsTo(Post, { foreignKey: 'postId' })
 
 export default Like
