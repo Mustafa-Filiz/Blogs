@@ -23,8 +23,8 @@ Like.init(
       allowNull: false,
       primaryKey: true,
     },
-    postId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
-    userId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
+    postId: { type: DataTypes.INTEGER, allowNull: false },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
     sequelize,
