@@ -22,12 +22,4 @@ export class LikeServices {
 
     return like
   }
-
-  static async findLikeByPost(postId: number, userId: number) {
-    return await LikeModel.findOne({ where: { postId, userId } })
-  }
-
-  static async findLikeByComment(commentId: number, userId: number) {
-    return await LikeModel.findOne({ where: { commentId, userId } })
-  }
 }

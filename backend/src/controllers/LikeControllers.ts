@@ -15,8 +15,7 @@ export const like = catchAsync(async (req: AuthRequest, res: Response) => {
   const targetId = Number(id)
 
   if (type === 'post') {
-    // Check if like already exists
-    const existingLike = await LikeServices.findLikeByPost(targetId, userId)
+    const existingLike = await LikeServices.getLikeByPost(targetId, userId)
     if (existingLike) {
       throw new ValidationError('Post already liked')
     }
@@ -26,8 +25,7 @@ export const like = catchAsync(async (req: AuthRequest, res: Response) => {
       userId,
     })
   } else {
-    // Check if like already exists
-    const existingLike = await LikeServices.findLikeByComment(targetId, userId)
+    const existingLike = await LikeServices.getLikeByComment(targetId, userId)
     if (existingLike) {
       throw new ValidationError('Comment already liked')
     }
