@@ -1,5 +1,6 @@
 export type Like = {
   id: number
-  postId: number
+  postId?: number
+  commentId?: number
   userId: number
 }
