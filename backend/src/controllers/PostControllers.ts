@@ -25,6 +25,17 @@ export const createPost = catchAsync(
   }
 )
 
+export const getAllPosts = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const posts = await PostService.getAllPosts()
+
+    res.send({
+      status: 200,
+      data: posts,
+    })
+  }
+)
+
 export const getUserPosts = catchAsync(
   async (req: AuthRequest, res: Response) => {
     const userId = Number(req.params.id)

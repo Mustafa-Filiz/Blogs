@@ -23,7 +23,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { authApi, ApiError } from "@/lib/api";
+import {
+  Alert,
+  AlertDescription,
+} from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { authApi, ApiError } from "@/lib/authApi";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -53,7 +58,7 @@ export default function SignUp() {
 
     try {
       await authApi.signup(data);
-      router.push("/");
+      router.push("/blogs");
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message || "Failed to create account. Please try again.");
@@ -69,7 +74,9 @@ export default function SignUp() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Create an account
+          </CardTitle>
           <CardDescription>
             Enter your information to create a new account
           </CardDescription>
@@ -78,9 +85,10 @@ export default function SignUp() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {error && (
-                <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-                  {error}
-                </div>
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
               <FormField
                 control={form.control}
@@ -152,4 +160,3 @@ export default function SignUp() {
     </div>
   );
 }
-

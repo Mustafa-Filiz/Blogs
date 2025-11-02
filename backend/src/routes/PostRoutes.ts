@@ -2,17 +2,23 @@ import express from 'express'
 import {
   createPost,
   deletePost,
+  getAllPosts,
   getPost,
   getUserPosts,
   updatePost,
 } from '../controllers/PostControllers'
+import { requireAuth } from '../utils/requireAuth'
 
 const postRouter = express.Router()
 
-postRouter.post('/create', createPost)
-postRouter.get('/user-posts/:id', getUserPosts)
+// Public routes - no authentication required
+postRouter.get('/all', getAllPosts)
 postRouter.get('/:id', getPost)
-postRouter.patch('update/:id', updatePost)
-postRouter.delete('delete/:id', deletePost)
+
+// Protected routes - authentication required
+postRouter.post('/create', requireAuth, createPost)
+postRouter.get('/user-posts/:id', requireAuth, getUserPosts)
+postRouter.patch('update/:id', requireAuth, updatePost)
+postRouter.delete('delete/:id', requireAuth, deletePost)
 
 export default postRouter

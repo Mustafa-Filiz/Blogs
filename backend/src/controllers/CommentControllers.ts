@@ -1,5 +1,5 @@
 import { catchAsync } from '../utils/catchAsync'
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { Comment } from '../types/Comment'
 import { AuthRequest } from '../types/AuthRequest'
 import { ValidationError } from '../utils/errors'
@@ -39,7 +39,7 @@ export const getComment = catchAsync(
 )
 
 export const getCommentsByPost = catchAsync(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const postId = Number(req.params.postId)
 
     const comments = await CommentServices.getCommentsByPost(postId)

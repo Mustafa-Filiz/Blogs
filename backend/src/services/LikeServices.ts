@@ -8,18 +8,10 @@ export class LikeServices {
   }
 
   static async getLikeByPost(postId: number, userId: number) {
-    const like = await LikeModel.findOne({ where: { postId, userId } })
-
-    if (!like) throw new ValidationError('Like not found')
-
-    return like
+    return await LikeModel.findOne({ where: { postId, userId } })
   }
 
   static async getLikeByComment(commentId: number, userId: number) {
-    const like = await LikeModel.findOne({ where: { commentId, userId } })
-
-    if (!like) throw new ValidationError('Like not found')
-
-    return like
+    return await LikeModel.findOne({ where: { commentId, userId } })
   }
 }

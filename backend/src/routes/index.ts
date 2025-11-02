@@ -8,8 +8,9 @@ import { requireAuth } from '../utils/requireAuth'
 const api = express.Router()
 
 api.use('/user', UserRoutes)
-api.use('/post', requireAuth, postRoutes)
+api.use('/post', postRoutes)
 api.use('/like', requireAuth, likeRoutes)
-api.use('/comment', requireAuth, commentRoutes)
+// Make getCommentsByPost public, other routes require auth
+api.use('/comment', commentRoutes)
 
 export default api

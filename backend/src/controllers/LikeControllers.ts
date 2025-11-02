@@ -54,9 +54,15 @@ export const unlike = catchAsync(async (req: AuthRequest, res: Response) => {
 
   if (type === 'post') {
     const like = await LikeServices.getLikeByPost(targetId, userId)
+    if (!like) {
+      throw new ValidationError('Like not found')
+    }
     await like.destroy()
   } else {
     const like = await LikeServices.getLikeByComment(targetId, userId)
+    if (!like) {
+      throw new ValidationError('Like not found')
+    }
     await like.destroy()
   }
 

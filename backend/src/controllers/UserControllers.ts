@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { catchAsync } from '../utils/catchAsync'
 import { User } from '../types/User'
+import { AuthRequest } from '../types/AuthRequest'
 import { ValidationError } from '../utils/errors'
 import { UserService } from '../services/UserServices'
 import { comparePassword, hashPassword } from '../utils/password'
@@ -104,3 +105,15 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
 
   res.send({ status: 'success' })
 })
+
+export const getCurrentUser = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const user = req.user!
+    res.send({
+      status: 'success',
+      data: {
+        user: { id: user.id, name: user.name, email: user.email },
+      },
+    })
+  }
+)

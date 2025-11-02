@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,46 +21,53 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  Alert,
-  AlertDescription,
-} from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { authApi, ApiError } from "@/lib/authApi";
+import { postsApi } from "@/lib/postsApi";
+import { ApiError } from "@/lib/api-utils";
 
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+const postSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(200, "Title must be less than 200 characters"),
+  content: z
+    .string()
+    .min(1, "Content is required")
+    .min(10, "Content must be at least 10 characters"),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type PostFormValues = z.infer<typeof postSchema>;
 
-export default function Login() {
+export default function WritePage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<PostFormValues>({
+    resolver: zodResolver(postSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      title: "",
+      content: "",
     },
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const onSubmit = async (data: PostFormValues) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      await authApi.login(data);
-      router.push("/blogs");
+      const response = await postsApi.createPost(data);
+      if (response.data) {
+        router.push("/blogs");
+      } else {
+        throw new Error(response.message || "Failed to create post");
+      }
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(
-          err.message || "Failed to sign in. Please check your credentials."
-        );
+        setError(err.message || "Failed to publish post. Please try again.");
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
@@ -72,16 +78,18 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-3xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Write a Blog Post
+          </CardTitle>
           <CardDescription>
-            Enter your credentials to sign in to your account
+            Share your thoughts and ideas with the world
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
@@ -90,14 +98,13 @@ export default function Login() {
               )}
               <FormField
                 control={form.control}
-                name="email"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
                       <Input
-                        type="email"
-                        placeholder="name@example.com"
+                        placeholder="Enter a compelling title for your post"
                         disabled={isLoading}
                         {...field}
                       />
@@ -108,15 +115,16 @@ export default function Login() {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Content</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
+                      <Textarea
+                        placeholder="Write your blog post content here..."
                         disabled={isLoading}
+                        rows={15}
+                        className="resize-y"
                         {...field}
                       />
                     </FormControl>
@@ -124,17 +132,21 @@ export default function Login() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign in"}
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                  disabled={isLoading}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Publishing..." : "Publish Post"}
+                </Button>
+              </div>
             </form>
           </Form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
         </CardContent>
       </Card>
     </div>

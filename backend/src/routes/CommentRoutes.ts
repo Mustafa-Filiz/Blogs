@@ -7,14 +7,18 @@ import {
   getCommentsByUser,
   updateComment,
 } from '../controllers/CommentControllers'
+import { requireAuth } from '../utils/requireAuth'
 
 const commentRouter = express.Router()
 
-commentRouter.post('/create', createComment)
+// Public route - no auth required
 commentRouter.get('/post/:postId', getCommentsByPost)
-commentRouter.get('/user/:id', getCommentsByUser)
-commentRouter.get('/:id', getComment)
-commentRouter.patch('/update/:id', updateComment)
-commentRouter.delete('/delete/:id', deleteComment)
+
+// Protected routes - auth required
+commentRouter.post('/create', requireAuth, createComment)
+commentRouter.get('/user/:id', requireAuth, getCommentsByUser)
+commentRouter.get('/:id', requireAuth, getComment)
+commentRouter.patch('/update/:id', requireAuth, updateComment)
+commentRouter.delete('/delete/:id', requireAuth, deleteComment)
 
 export default commentRouter
