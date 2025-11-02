@@ -1,1 +1,1 @@
-const APP_TOKEN_NAME = 'blogsAppToken'
+export const APP_TOKEN_NAME = 'blogsAppToken'

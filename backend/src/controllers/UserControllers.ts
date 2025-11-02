@@ -5,6 +5,7 @@ import { ValidationError } from '../utils/errors'
 import { UserService } from '../services/UserServices'
 import { comparePassword, hashPassword } from '../utils/password'
 import { generateToken } from '../utils/jwt'
+import { APP_TOKEN_NAME } from '../constants'
 
 const token = (user: User, res: Response) => {
   const generatedToken = generateToken({

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { authApi, ApiError } from "@/lib/api";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -32,6 +34,10 @@ const signupSchema = z.object({
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function SignUp() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -42,9 +48,21 @@ export default function SignUp() {
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    console.log("Signup data:", data);
-    // TODO: Implement signup logic here
-    // e.g., await signup(data.name, data.email, data.password)
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await authApi.signup(data);
+      router.push("/");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message || "Failed to create account. Please try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -59,6 +77,11 @@ export default function SignUp() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              {error && (
+                <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                  {error}
+                </div>
+              )}
               <FormField
                 control={form.control}
                 name="name"
@@ -69,6 +92,7 @@ export default function SignUp() {
                       <Input
                         type="text"
                         placeholder="John Doe"
+                        disabled={isLoading}
                         {...field}
                       />
                     </FormControl>
@@ -86,6 +110,7 @@ export default function SignUp() {
                       <Input
                         type="email"
                         placeholder="name@example.com"
+                        disabled={isLoading}
                         {...field}
                       />
                     </FormControl>
@@ -103,6 +128,7 @@ export default function SignUp() {
                       <Input
                         type="password"
                         placeholder="Enter your password"
+                        disabled={isLoading}
                         {...field}
                       />
                     </FormControl>
@@ -110,8 +136,8 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Sign up
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Creating account..." : "Sign up"}
               </Button>
             </form>
           </Form>
