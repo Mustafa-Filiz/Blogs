@@ -1,8 +1,8 @@
 import { usePathname } from 'next/navigation'
 
-export const useDynamicPathname = (path: string) => {
+export const usePathnameArray = () => {
   const p = usePathname()
 
-  return p.split('/')
-  
+  return p.split('/').slice(1)
+
 }
