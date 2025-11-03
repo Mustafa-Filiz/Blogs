@@ -17,7 +17,7 @@ postRouter.get('/:id', getPost)
 
 // Protected routes - authentication required
 postRouter.post('/create', requireAuth, createPost)
-postRouter.get('/user-posts/:id', requireAuth, getUserPosts)
+postRouter.get('/user/:id', requireAuth, getUserPosts)
 postRouter.patch('update/:id', requireAuth, updatePost)
 postRouter.delete('delete/:id', requireAuth, deletePost)
 

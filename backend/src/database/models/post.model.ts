@@ -18,8 +18,8 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
 Post.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    title: { type: DataTypes.STRING, allowNull: false },
-    content: { type: DataTypes.STRING },
+    title: { type: DataTypes.TEXT, allowNull: false },
+    content: { type: DataTypes.TEXT },
     userId: { type: DataTypes.INTEGER, allowNull: false },
   },
   {

@@ -1,10 +1,11 @@
 'use client'
 
-import { ChevronsUpDown, LogOut } from 'lucide-react'
+import { BookA, ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -14,6 +15,8 @@ import { SidebarMenuButton } from '@/components/ui/sidebar'
 import { User } from '@/lib/types'
 import { takeInitials } from '@/lib/utils'
 import { authApi } from '@/lib/authApi'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type Props = {
   user?: User
@@ -21,6 +24,12 @@ type Props = {
 
 export function NavUser({ user }: Props) {
   if (!user) return
+
+  const router = useRouter()
+  const handleLogout = () => {
+    authApi.logout()
+    router.push('/')
+  }
 
   return (
     <DropdownMenu>
@@ -57,13 +66,19 @@ export function NavUser({ user }: Props) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/*<DropdownMenuGroup>*/}
-        {/*  <DropdownMenuItem>*/}
-        {/*    <Sparkles />*/}
-        {/*    Upgrade to Pro*/}
-        {/*  </DropdownMenuItem>*/}
-        {/*</DropdownMenuGroup>*/}
-        {/*<DropdownMenuSeparator />*/}
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href="/blogs/my">
+              <BookA />
+              My Posts
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Settings />
+            Update user info
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
         {/*<DropdownMenuGroup>*/}
         {/*  <DropdownMenuItem>*/}
         {/*    <BadgeCheck />*/}
@@ -79,7 +94,7 @@ export function NavUser({ user }: Props) {
         {/*  </DropdownMenuItem>*/}
         {/*</DropdownMenuGroup>*/}
         {/*<DropdownMenuSeparator />*/}
-        <DropdownMenuItem onClick={authApi.logout}>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
           Log out
         </DropdownMenuItem>

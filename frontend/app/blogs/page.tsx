@@ -3,7 +3,7 @@ import { getAllPostsServer } from '@/lib/postsApi'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Pencil } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import PostItem from '@/components/post-item'
 //
 // export const iframeHeight = '800px'
 //
@@ -52,30 +52,7 @@ export default async function Page() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
-            <Card key={post.id} className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow">
-              <Link href={`/blogs/${post.id}`}>
-                <CardHeader>
-                  <CardTitle className="text-2xl line-clamp-2">
-                    {post.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="grow">
-                  <p className="text-muted-foreground line-clamp-4">
-                    {post.content}
-                  </p>
-                </CardContent>
-                <CardFooter className="flex flex-col items-start gap-2 border-t pt-4">
-                  <div className="text-sm text-muted-foreground">
-                    <span className="font-semibold">Writer: </span>
-                    <span>{post.User?.name || 'Unknown'}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    <span className="font-semibold">Date: </span>
-                    <span>{formatDate(post.createdAt)}</span>
-                  </div>
-                </CardFooter>
-              </Link>
-            </Card>
+            <PostItem post={post} />
           ))}
         </div>
       )}

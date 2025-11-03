@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize'
 
-export const sequelize = new Sequelize('example_db', 'postgres', 'postgres', {
+export const sequelize = new Sequelize('blogs_db', 'postgres', 'postgres', {
   dialect: 'postgres',
   define: {
     underscored: true,

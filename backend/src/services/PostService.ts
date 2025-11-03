@@ -13,7 +13,12 @@ export class PostService {
   static async getUserPosts(userId: number) {
     return await PostModel.findAll({
       where: { userId },
-      include: [CommentModel],
+      include: [
+        {
+          model: UserModel,
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
     })
   }
 

@@ -11,5 +11,19 @@ export function capitalizeFirstLetter(str: string) {
 }
 
 export function takeInitials(str: string) {
-  return str.split(' ').map(s => s.charAt(0).toUpperCase()).join('')
+  return str
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase())
+    .join('')
+}
+
+export function formatDate(dateString: string, withHour: boolean = false) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    ...(withHour && { hour: '2-digit', minute: '2-digit' }),
+
+  })
 }
