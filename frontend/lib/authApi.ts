@@ -1,5 +1,5 @@
 import { ApiError, fetchWithCookies, fetchWithCredentials } from './api-utils'
-import type { ApiResponse, LoginData, SignupData, User } from './types'
+import type { ApiResponse, LoginData, SignupData, UpdateData, User } from './types'
 
 export const authApi = {
   async signup(data: SignupData): Promise<ApiResponse<{ user: User }>> {
@@ -31,6 +31,15 @@ export const authApi = {
     })
     return response.json()
   },
+
+  async updateUser(data: UpdateData): Promise<ApiResponse<{ user: User }>> {
+    const response = await fetchWithCredentials(`/user/update/${data.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    })
+    return response.json()
+  },
+
 }
 
 export const serverAuthApi = {

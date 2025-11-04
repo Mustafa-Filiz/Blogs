@@ -9,6 +9,12 @@ export interface LoginData {
   password: string
 }
 
+export interface UpdateData {
+  id: number
+  name: string
+  password: string
+}
+
 export interface User {
   id: number
   name: string
@@ -18,12 +24,6 @@ export interface User {
 export interface Like {
   id: number
   userId: number
-}
-
-export interface User {
-  id: number
-  name: string
-  email: string
 }
 
 export interface Comment {

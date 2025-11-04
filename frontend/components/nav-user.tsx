@@ -1,6 +1,6 @@
 'use client'
 
-import { BookA, ChevronsUpDown, LogOut, Settings } from 'lucide-react'
+import { BookA, ChevronsUpDown, LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import { takeInitials } from '@/lib/utils'
 import { authApi } from '@/lib/authApi'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ProfileDialog } from '@/components/profile-modal'
 
 type Props = {
   user?: User
@@ -68,14 +69,13 @@ export function NavUser({ user }: Props) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
+            <ProfileDialog />
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link href="/blogs/my">
               <BookA />
               My Posts
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings />
-            Update user info
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
