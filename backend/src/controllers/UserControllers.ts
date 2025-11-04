@@ -108,7 +108,8 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
 
 export const getCurrentUser = catchAsync(
   async (req: AuthRequest, res: Response) => {
-    const user = req.user!
+    const userId = req.user!.id
+    const user = await UserService.getUserById(userId)
     res.send({
       status: 'success',
       data: {

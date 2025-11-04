@@ -1,34 +1,21 @@
-import type { Post } from '@/lib/types'
-import { getAllPostsServer } from '@/lib/postsApi'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { Pencil } from 'lucide-react'
-import PostItem from '@/components/post-item'
-//
-// export const iframeHeight = '800px'
-//
-// export const description = 'A sidebar with a header and a search form.'
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
+import type { Post } from "@/lib/types";
+import { getAllPostsServer } from "@/lib/postsApi";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Pencil } from "lucide-react";
+import PostItem from "@/components/post-item";
 
 export default async function Page() {
-  let posts: Post[] = []
-  let error: string | null = null
+  let posts: Post[] = [];
+  let error: string | null = null;
 
   try {
-    posts = await getAllPostsServer()
+    posts = await getAllPostsServer();
   } catch (err) {
     error =
       err instanceof Error
         ? err.message
-        : 'An error occurred while fetching posts'
+        : "An error occurred while fetching posts";
   }
 
   return (
@@ -52,10 +39,10 @@ export default async function Page() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
-            <PostItem post={post} />
+            <PostItem key={post.id} post={post} />
           ))}
         </div>
       )}
     </>
-  )
+  );
 }
